@@ -93,3 +93,9 @@ Copy `.env.example` to `.env`, set secrets and run `docker compose up -d` after 
 ## Reference
 
 Community protocol: https://github.com/Doridian/OpenBambuAPI/blob/main/mqtt.md and https://github.com/mqtt-home/mqtt-bambu . Bambu does not guarantee backwards compatibility.
+
+## Druckstudio – experimentell
+
+Modellbibliothek für STL/3MF mit Upload, Download und Löschen (max. 50 MB). Serverseitiges PrusaSlicer-CLI-Slicing ist nur mit einem **selbst bereitgestellten, validierten** Profil unter `/app/profiles/printer.ini` möglich. Ohne Profil wird Slicing verweigert. Generischer G-Code ist **nicht** automatisch P2S-kompatibel; nicht ungeprüft drucken. Kein direkter Cloud-Datei-Upload, kein 3D-Editor und noch kein Bambu-Studio-Ersatz.
+
+Arcane Compose: Dem `ag-print` Service unter `volumes` `- agprint_models:/app/data` und `- /opt/ag-print/profiles:/app/profiles:ro` hinzufügen. Unter den obersten `volumes` zusätzlich `agprint_models:` eintragen. Im Hostordner `/opt/ag-print/profiles` ein geprüftes `printer.ini` ablegen. API: `/api/studio/models`, `/api/studio/slicer`, `/api/studio/slice` (Login erforderlich).
