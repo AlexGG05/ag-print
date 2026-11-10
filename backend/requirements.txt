@@ -1,0 +1,9 @@
+fastapi==0.115.12
+uvicorn==0.34.2
+sqlalchemy==2.0.40
+psycopg[binary]==3.2.6
+PyJWT==2.10.1
+pwdlib[argon2]==0.2.1
+pydantic[email]==2.11.3
+
+paho-mqtt==2.1.0

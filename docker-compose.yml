@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: agprint
+      POSTGRES_USER: agprint
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+    volumes:
+      - agprint_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agprint -d agprint"]
+      interval: 5s
+      retries: 15
+  ag-print:
+    image: ghcr.io/alexgg05/ag-print:latest
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-8086}:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://agprint:${POSTGRES_PASSWORD}@db:5432/agprint
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:?Set ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set ADMIN_PASSWORD}
+      ENABLE_MULTIUSER: "false"
+      BAMBU_USER_ID: ${BAMBU_USER_ID:-}
+      BAMBU_ACCESS_TOKEN: ${BAMBU_ACCESS_TOKEN:-}
+      BAMBU_SERIAL: ${BAMBU_SERIAL:-}
+      BAMBU_PRINTER_NAME: ${BAMBU_PRINTER_NAME:-Mein Bambu P2S}
+      BAMBU_MQTT_HOST: ${BAMBU_MQTT_HOST:-us.mqtt.bambulab.com}
+    depends_on:
+      db:
+        condition: service_healthy
+volumes:
+  agprint_db:
