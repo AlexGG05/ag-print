@@ -8,6 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pathlib import Path
 from app.bambu_cloud import monitor
+from app.studio import make_router
 import re
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr, Field
@@ -270,6 +271,8 @@ def start_saved_print(data: SavedPrint, _:User=Depends(admin)):
 @app.get('/api/bambu/status')
 def bambu_status(user:User=Depends(current_user)):
     return monitor.snapshot()
+
+app.include_router(make_router(current_user))
 
 # Single-container image: serve React build from the API service.
 STATIC_DIR = Path('/app/static')
