@@ -30,7 +30,7 @@ def make_router(auth):
                     if size>50*1048576:raise HTTPException(413,"Maximal 50 MB")
                     out.write(chunk)
             if size==0:raise HTTPException(422,"Leere Datei")
-            if suffix==".3mf" and dest.read_bytes()[:4]!=b"PK\\x03\\x04":raise HTTPException(422,"Ungültiger 3MF-Header")
+            if suffix==".3mf" and dest.read_bytes()[:4]!=bytes([80,75,3,4]):raise HTTPException(422,"Ungültiger 3MF-Header")
             return {"id":mid,"format":suffix,"bytes":size}
         except Exception:
             dest.unlink(missing_ok=True);raise
