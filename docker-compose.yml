@@ -28,8 +28,12 @@ services:
       BAMBU_SERIAL: ${BAMBU_SERIAL:-}
       BAMBU_PRINTER_NAME: ${BAMBU_PRINTER_NAME:-Mein Bambu P2S}
       BAMBU_MQTT_HOST: ${BAMBU_MQTT_HOST:-us.mqtt.bambulab.com}
+    volumes:
+      - agprint_models:/app/data
+      - ./profiles:/app/profiles:ro
     depends_on:
       db:
         condition: service_healthy
 volumes:
   agprint_db:
+  agprint_models:
